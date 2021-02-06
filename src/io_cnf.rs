@@ -3,9 +3,9 @@ use std::{
     io::{BufRead, BufReader},
     path::Path,
 };
-pub fn read_cnf_file(filename: &str) -> (i32, i32, Vec<Vec<i32>>) {
-    let mut nr_lit = -1;
-    let mut nr_cl = -1;
+pub fn read_cnf_file(filename: &str) -> (usize, usize, Vec<Vec<i32>>) {
+    let mut nr_lit: usize = 0;
+    let mut nr_cl: usize = 0;
     let path = Path::new(&filename);
     let data = File::open(&path).expect("file not found");
     let mut b_reader = BufReader::new(data);
@@ -34,6 +34,7 @@ pub fn read_cnf_file(filename: &str) -> (i32, i32, Vec<Vec<i32>>) {
                 .collect();
             temp.append(&mut i);
             if new {
+                temp.sort();
                 clauses.push(temp);
                 temp = vec![];
                 new = false;
@@ -48,5 +49,5 @@ fn test_1() {
     let (nr_lit, nr_cl, clauses) = read_cnf_file("test.txt");
     assert_eq!(nr_lit, 9);
     assert_eq!(nr_cl, 12);
-    assert_eq!(nr_cl, clauses.len() as i32);
+    assert_eq!(nr_cl, clauses.len());
 }
